@@ -1,0 +1,13 @@
+curl http://localhost:4000/
+
+імпорт
+curl -Method POST http://localhost:4000/api/aq/fetch -Headers @{ "x-admin-token"="changeme" }
+
+10 записів
+curl "http://localhost:4000/api/aq?limit=10"
+
+# пм2.5
+curl "http://localhost:4000/api/aq?parameter=pm2_5&limit=5"
+
+# діапазон дат
+curl "http://localhost:4000/api/aq?dateFrom=2025-09-01T00:00&dateTo=2025-09-30T23:59&limit=10"

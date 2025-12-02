@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import aqRoutes from './routes/aqRoutes.js';
 import notFound from './middlewares/notFound.js';
 import errorHandler from './middlewares/errorHandler.js';
+import damageRoutes from './routes/damageRoutes.js';
 
 const app = express();
 app.use(helmet());
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/aq', aqRoutes);
+app.use('/api/damage', damageRoutes);
 app.use(notFound);
 app.use(errorHandler);
 

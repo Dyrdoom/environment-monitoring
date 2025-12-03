@@ -36,7 +36,7 @@ export default function DamageCalculator() {
 
   useEffect(() => { fetchData(); }, []);
 
-  // Автозаповнення коефіцієнтів при зміні забруднювача
+  // Автозаповнення коефіцієнтів
   useEffect(() => {
     if (config && config.pollutants && config.pollutants[formData.pollutant]) {
       const pData = config.pollutants[formData.pollutant];
@@ -82,7 +82,6 @@ export default function DamageCalculator() {
 
   const saveConfig = async () => {
       try {
-        // Тут можна додати логіку редагування JSON через textarea
         const newConfig = JSON.parse(document.getElementById('configArea').value);
         await axios.put(`${API_BASE}/api/damage/config`, newConfig);
         setConfig(newConfig);
@@ -135,7 +134,6 @@ export default function DamageCalculator() {
             <button type="submit" style={{width:'100%', padding: 8, backgroundColor: '#4CAF50', color: 'white', border:'none'}}>Розрахувати</button>
         </form>
 
-        {/* Кнопки управління */}
         <div style={{ flex: 1 }}>
             <div style={{ marginBottom: 20 }}>
                 <button onClick={handleGenerate} disabled={loading} style={{ padding: '10px 20px', marginRight: 10 }}>

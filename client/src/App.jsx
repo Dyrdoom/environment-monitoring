@@ -108,7 +108,6 @@ export default function App() {
     }
   }
 
-  // Перезавантажувати дані при зміні фільтрів або вкладки
   useEffect(() => { load() }, [query, activeTab])
 
   return (

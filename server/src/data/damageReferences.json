@@ -1,10 +1,25 @@
 {
   "pollutants": {
-    "SO2": { "baseRate": 2450.00, "kT": 1.5 },
-    "NOx": { "baseRate": 2450.00, "kT": 1.2 },
-    "CO": { "baseRate": 90.00, "kT": 0.8 },
-    "PM10": { "baseRate": 150.00, "kT": 2.0 },
-    "VOC": { "baseRate": 300.00, "kT": 1.1 }
+    "SO2": {
+      "baseRate": 55555,
+      "kT": 1.5
+    },
+    "NOx": {
+      "baseRate": 2450,
+      "kT": 1.2
+    },
+    "CO": {
+      "baseRate": 90,
+      "kT": 0.8
+    },
+    "PM10": {
+      "baseRate": 150,
+      "kT": 2
+    },
+    "VOC": {
+      "baseRate": 300,
+      "kT": 1.1
+    }
   },
   "regional": {
     "Sumy": 1.2,
@@ -13,6 +28,6 @@
   },
   "season": {
     "winter": 1.1,
-    "summer": 1.0
+    "summer": 1
   }
 }

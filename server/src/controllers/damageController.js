@@ -7,17 +7,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const CONFIG_PATH = path.join(__dirname, '../data/damageReferences.json');
 
-// Допоміжна функція для читання конфігу
 const getConfig = async () => {
   try {
     const data = await fs.readFile(CONFIG_PATH, 'utf-8');
     return JSON.parse(data);
   } catch (e) {
-    return {}; // Повертаємо пустий об'єкт якщо файл не знайдено
+    return {}; 
   }
 };
 
-// 1. Отримати всі розрахунки
 export const getCalculations = async (req, res, next) => {
   try {
     const items = await DamageCalc.find().sort({ dateCalculated: -1 }).limit(100);
@@ -27,7 +25,6 @@ export const getCalculations = async (req, res, next) => {
   }
 };
 
-// 2. Отримати поточну конфігурацію
 export const getConfigData = async (req, res, next) => {
   try {
     const config = await getConfig();
@@ -37,7 +34,6 @@ export const getConfigData = async (req, res, next) => {
   }
 };
 
-// 3. Оновити конфігурацію
 export const updateConfigData = async (req, res, next) => {
   try {
     await fs.writeFile(CONFIG_PATH, JSON.stringify(req.body, null, 2));
@@ -47,12 +43,11 @@ export const updateConfigData = async (req, res, next) => {
   }
 };
 
-// 4. Створити розрахунок (з нормалізацією)
 export const createCalculation = async (req, res, next) => {
   try {
     const { pollutant, massInput, unit, baseRate, kT, kR, kOther, sourceId } = req.body;
 
-    // Нормалізація: переводимо все в тонни (t)
+    //  все в t 
     let massExcess = parseFloat(massInput);
     let conversionFactor = 1;
 
@@ -60,18 +55,11 @@ export const createCalculation = async (req, res, next) => {
       conversionFactor = 0.001;
       massExcess = massExcess * conversionFactor;
     } else if (unit === 'mg_m3') { 
-       // Прикладне переведення, якщо вхідні дані це концентрація, потрібен об'єм викиду.
-       // Для спрощення задачі вважаємо, що це пряме переведення маси, 
-       // або user в UI вже ввів "т".
-       // Якщо це концентрація, треба питати об'єм (V).
-       // Поки залишимо просту конвертацію маси.
-       conversionFactor = 0.000000001; // мг -> т (дуже умовно без об'єму)
+       conversionFactor = 0.000000001; // мг -> т 
     }
 
-    // Валідація невід'ємності
     if (massExcess < 0) throw new Error('Mass must be >= 0');
 
-    // Формула: Mass * Base * Kt * Kr * K...
     const kOtherProd = (kOther || []).reduce((acc, val) => acc * val, 1);
     const total = massExcess * baseRate * kT * kR * kOtherProd;
 
@@ -98,7 +86,6 @@ export const createCalculation = async (req, res, next) => {
   }
 };
 
-// 5. Генерація синтетичних даних
 export const generateSyntheticData = async (req, res, next) => {
   try {
     const count = req.body.count || 10;
@@ -112,10 +99,8 @@ export const generateSyntheticData = async (req, res, next) => {
     for (let i = 0; i < count; i++) {
       const pollutant = pollutantsList[Math.floor(Math.random() * pollutantsList.length)];
       
-      // Діапазони з завдання
       const massExcess = random(0.01, 50); // т/рік
       
-      // Беремо базу з конфігу або генеруємо
       const refData = config.pollutants?.[pollutant] || {};
       const baseRate = refData.baseRate || random(0.01, 50);
       const kT = refData.kT || random(0.5, 5);
@@ -149,7 +134,6 @@ export const generateSyntheticData = async (req, res, next) => {
   }
 };
 
-// 6. Видалення запису
 export const deleteCalculation = async (req, res, next) => {
     try {
         await DamageCalc.findByIdAndDelete(req.params.id);
